@@ -1,6 +1,3 @@
-const Movie = require('../models/Movie');
-const TvShow = require('../models/TvShow');
-
 class FeaturedController {
   async index(req, res) {
     try {
