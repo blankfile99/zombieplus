@@ -46,7 +46,7 @@ routes.get('/tvshows/:id', auth, pkValidator, tvShowController.show);
 routes.delete('/tvshows/:id', auth, pkValidator, tvShowController.delete);
 
 routes.get('/leads', auth, leadController.index);
-routes.post('/leads', auth, leadCreateValidator, leadController.store);
+routes.post('/leads', leadCreateValidator, leadController.store);
 routes.get('/leads/:id', auth, pkValidator, leadController.show);
 routes.delete('/leads/:id', auth, pkValidator, leadController.delete);
 

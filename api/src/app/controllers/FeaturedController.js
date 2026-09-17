@@ -1,30 +1,21 @@
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  database: process.env.DB_NAME || 'zombieplus',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASS || 'pwd123',
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-});
+const Movie = require('../models/Movie');
+const TvShow = require('../models/TvShow');
 
 class FeaturedController {
   async index(req, res) {
-    const movies = await pool.query(`
-      SELECT id, title, overview, release_year, cover
-      FROM movies
-      WHERE featured = true
-      ORDER BY created_at ASC
-    `);
-    const tvShows = await pool.query(`
-      SELECT id, title, overview, release_year, cover
-      FROM tvshows
-      WHERE featured = true
-      ORDER BY created_at ASC
-    `);
+    try {
+      // MOCK DATA para teste de conectividade
+      const data = [
+        { id: '1', title: 'Teste Movie', overview: 'Descrição de teste', release_year: 2024, cover: 'http://via.placeholder.com/150' },
+        { id: '2', title: 'Teste TV Show', overview: 'Descrição de teste', release_year: 2024, cover: 'http://via.placeholder.com/150' }
+      ];
 
-    const data = [...movies.rows, ...tvShows.rows];
-    return res.json({ data, total: data.length });
+      console.log('Returning mock data for catalog...');
+      return res.json({ data, total: data.length });
+    } catch (error) {
+      console.error('Error in FeaturedController.index:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
   }
 }
 

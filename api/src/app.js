@@ -39,8 +39,10 @@ class App {
 
     exceptionHandler() {
         this.app.use((err, req, res, next) => {
+            console.error('GLOBAL ERROR CAPTURED:', err);
             return res.status(500).json({
                 error: err.message,
+                stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
             });
         });
     }
