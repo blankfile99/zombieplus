@@ -36,6 +36,8 @@ services:
     volumes:
       - ./api:/app
     environment:
+      PORT: 3000
+      APP_URL: http://localhost:3000
       DB_DIALECT: postgres
       DB_HOST: database
       DB_USER: postgres
