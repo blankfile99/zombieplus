@@ -1,0 +1,65 @@
+# docker-compose.yml
+name: zombieplus
+services:
+  database:
+    container_name: pgdb
+    image: postgres
+    environment:
+      POSTGRES_DB: zombieplus
+      POSTGRES_PASSWORD: "pwd123"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks:
+      - zombie-net
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@qax.com"
+      PGADMIN_DEFAULT_PASSWORD: "pwd123"
+    ports:
+      - "16543:80"
+    depends_on:
+      - database
+    networks:
+      - zombie-net
+
+  api:
+    build: ./api
+    container_name: zombieplus_api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api:/app
+    environment:
+      DB_DIALECT: postgres
+      DB_HOST: database
+      DB_USER: postgres
+      DB_PASS: "pwd123"
+      DB_NAME: zombieplus
+    depends_on:
+      - database
+    networks:
+      - zombie-net
+
+  web:
+    build: ./web
+    container_name: zombieplus_web
+    ports:
+      - "80:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000
+    depends_on:
+      - api
+    networks:
+      - zombie-net
+
+networks:
+  zombie-net:
+    driver: bridge
+
+volumes:
+  pgdata:
